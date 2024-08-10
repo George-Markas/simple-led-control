@@ -1,19 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define BUFFER_SIZE 7
+#define BUFFER_SIZE (sizeof(char) * 7) // 6 + 1 null terminator from fgets
 #define MODE "r"
 
-char *read_color(char* filename) {
-    char* color = NULL;
+__attribute__((unused)) char *read_color(const char *filename) {
     FILE *f_ptr = fopen(filename, MODE);
-
-    if(f_ptr != NULL) {
-        char *buffer = malloc(BUFFER_SIZE * sizeof(char));
-        fgets(buffer, BUFFER_SIZE, f_ptr);
-        color = buffer;
+    if(f_ptr == NULL) {
+        fprintf(stderr, "Error: could not open \"%s\"", filename);
+        return NULL;
     }
 
+    char *buffer = (char*) malloc(BUFFER_SIZE);
+    fgets(buffer, 7, f_ptr);
     fclose(f_ptr);
-    return color;
+    return buffer;
 }

@@ -1,22 +1,24 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "../include/color_hex_parser.h"
+#include "../include/hex_to_rgb.h"
 #include "../include/brightness_control.h"
 #include "../include/mystrcat.h"
 #include "../include/read_color.h"
 #include "../include/update_color.h"
 
-#define FILENAME "color.txt"
+#define FILENAME "color.dat"
 
 int main(void) {
 
-    char* color_hex = read_color(FILENAME);
+    char *color_hex = read_color(FILENAME);
     if(color_hex == NULL)
         exit(EXIT_FAILURE);
 
     unsigned char* rgb_vals = hex_to_rgb(color_hex);
+    free(color_hex);
 
     /* brightness adjustment here */
+    brightness_down(rgb_vals);
 
     /* convert the new values back to hex and concatenate into a single string */
     char* new_color_hex = calloc(7, sizeof(char));
